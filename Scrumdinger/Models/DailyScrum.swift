@@ -5,22 +5,25 @@
 //  Created by Andrew Morgan on 22/12/2020.
 //
 
+import RealmSwift
 import SwiftUI
 
-struct DailyScrum: Identifiable, Codable {
-    let id: UUID
-    var title: String
-    var attendees: [String]
-    var lengthInMinutes: Int
-    var color: Color
+class DailyScrum: Object, Identifiable {
+    @objc dynamic var id: UUID
+    @objc dynamic var title: String
+    let attendees = RealmSwift.List<String>()
+    @objc dynamic var lengthInMinutes: Int
+    @objc dynamic var color: Components
     var history: [History]
     
     init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
         self.id = id
         self.title = title
-        self.attendees = attendees
+        for attendee in attendees {
+            self.attendees.append(attendee)
+        }
         self.lengthInMinutes = lengthInMinutes
-        self.color = color
+        self.color = color.components
         self.history = history
         }
 }
@@ -44,14 +47,16 @@ extension DailyScrum {
     }
 
     var data: Data {
-        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color)
+        return Data(title: title, attendees: Array(attendees), lengthInMinutes: Double(lengthInMinutes), color: Color(color))
     }
     
-    mutating func update(from data: Data) {
+    func update(from data: Data) {
         title = data.title
-        attendees = data.attendees
+        for attendee in attendees {
+            self.attendees.append(attendee)
+        }
         lengthInMinutes = Int(data.lengthInMinutes)
-        color = data.color
+        color = data.color.components
     }
 }
 

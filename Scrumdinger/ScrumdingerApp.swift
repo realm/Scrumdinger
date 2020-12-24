@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 @main
-struct ScrumdingerApp: App {
+struct ScrumdingerApp: SwiftUI.App {
     @ObservedObject private var data = ScrumData()
+    let realm = try! Realm()
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
