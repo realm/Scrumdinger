@@ -9,14 +9,18 @@ import SwiftUI
 
 struct DetailView: View {
     @Binding var scrum: DailyScrum
+    
+    @EnvironmentObject var state: AppState
     @State private var data = DailyScrum.Data()
     @State private var isPresented = false
     
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
+                // TODO: Why do I need to pass in the state?
                 NavigationLink(
-                    destination: MeetingView(scrum: $scrum)) {
+                    destination: MeetingView(scrum: $scrum)
+                        .environmentObject(state)) {
                     Label("Start Meeting", systemImage: "timer")
                         .font(.headline)
                         .foregroundColor(.accentColor)
@@ -47,10 +51,10 @@ struct DetailView: View {
                     Label("No meetings yet", systemImage: "calendar.badge.exclamationmark")
                 }
                 ForEach(scrum.history) { history in
-                    NavigationLink(destination: HistoryView(history: history                                                                                                                                                                                                                                            )) {
+                    NavigationLink(destination: HistoryView(history: history)) {
                         HStack {
                             Image(systemName: "calendar")
-                            Text(history.date, style: .date)
+                            Text(history.date ?? Date(), style: .date)
                         }
                     }
                 }
@@ -66,12 +70,17 @@ struct DetailView: View {
             NavigationView {
                 EditView(scrumData: $data)
                     .navigationTitle(scrum.title)
-                    // TODO: Use this in my apps
                     .navigationBarItems(leading: Button("Cancel") {
                         isPresented = false
                     }, trailing: Button("Done") {
                         isPresented = false
-                        scrum.update(from: data)
+                        do {
+                            try state.realm.write {
+                                scrum.update(from: data)
+                            }
+                        } catch {
+                            print("Unable to update data in Realm")
+                        }
                 })
             }
         }
@@ -79,9 +88,12 @@ struct DetailView: View {
 }
 
 struct DetailView_Previews: PreviewProvider {
+    static var state = AppState()
+
     static var previews: some View {
         NavigationView {
             DetailView(scrum: .constant(DailyScrum.data[0]))
+                .environmentObject(state)
         }
     }
 }

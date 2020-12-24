@@ -8,20 +8,20 @@
 import SwiftUI
 import RealmSwift
 
+class AppState: ObservableObject {
+    let realm  = try! Realm()
+    static var sample: AppState { AppState() }
+}
+
 @main
 struct ScrumdingerApp: SwiftUI.App {
-    @ObservedObject private var data = ScrumData()
-    let realm = try! Realm()
+    @StateObject var state = AppState()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ScrumsView(scrums: $data.scrums) {
-                    data.save()
-                }
-            }
-            .onAppear {
-                data.load()
+                ScrumsView()
+                    .environmentObject(state)
             }
         }
     }

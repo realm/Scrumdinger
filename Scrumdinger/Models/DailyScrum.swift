@@ -9,23 +9,29 @@ import RealmSwift
 import SwiftUI
 
 class DailyScrum: Object, Identifiable {
-    @objc dynamic var id: UUID
-    @objc dynamic var title: String
-    let attendees = RealmSwift.List<String>()
-    @objc dynamic var lengthInMinutes: Int
-    @objc dynamic var color: Components
-    var history: [History]
+    @objc dynamic var id = UUID().uuidString
+    @objc dynamic var title = ""
+    let attendeeList = RealmSwift.List<String>()
+    @objc dynamic var lengthInMinutes = 0
+    @objc dynamic var colorComponents: Components?
+    let historyList = RealmSwift.List<History>()
     
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
-        self.id = id
+    var color: Color { Color(colorComponents ?? Components()) }
+    var attendees: [String] { Array(attendeeList) }
+    var history: [History] { Array(historyList) }
+    
+    convenience init(title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
+        self.init()
         self.title = title
         for attendee in attendees {
-            self.attendees.append(attendee)
+            self.attendeeList.append(attendee)
         }
         self.lengthInMinutes = lengthInMinutes
-        self.color = color.components
-        self.history = history
+        self.colorComponents = color.components
+        for entry in history {
+            self.historyList.insert(entry, at: 0)
         }
+    }
 }
 
 extension DailyScrum {
@@ -47,16 +53,16 @@ extension DailyScrum {
     }
 
     var data: Data {
-        return Data(title: title, attendees: Array(attendees), lengthInMinutes: Double(lengthInMinutes), color: Color(color))
+        return Data(title: title, attendees: Array(attendees), lengthInMinutes: Double(lengthInMinutes), color: color)
     }
     
     func update(from data: Data) {
         title = data.title
         for attendee in attendees {
-            self.attendees.append(attendee)
+            self.attendeeList.append(attendee)
         }
         lengthInMinutes = Int(data.lengthInMinutes)
-        color = data.color.components
+        colorComponents = data.color.components
     }
 }
 

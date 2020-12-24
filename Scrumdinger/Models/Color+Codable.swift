@@ -11,7 +11,8 @@ class Components: EmbeddedObject {
     @objc dynamic var blue: Double = 0
     @objc dynamic var alpha: Double = 0
     
-    init(red: Double, green: Double, blue: Double, alpha: Double) {
+    convenience init(red: Double, green: Double, blue: Double, alpha: Double) {
+        self.init()
         self.red = red
         self.green = green
         self.blue = blue

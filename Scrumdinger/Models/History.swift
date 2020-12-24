@@ -6,17 +6,18 @@ import Foundation
 import RealmSwift
 
 class History: EmbeddedObject, Identifiable {
-    @objc dynamic var id: UUID
-    @objc dynamic var date: Date
-    let attendees = List<String>()
-    @objc dynamic var lengthInMinutes: Int
+    @objc dynamic var id = UUID().uuidString
+    @objc dynamic var date: Date?
+    let attendeeList = List<String>()
+    @objc dynamic var lengthInMinutes: Int = 0
     @objc dynamic var transcript: String?
+    var attendees: [String] { Array(attendeeList) }
 
-    init(id: UUID = UUID(), date: Date = Date(), attendees: [String], lengthInMinutes: Int, transcript: String? = nil) {
-        self.id = id
+    convenience init(date: Date = Date(), attendees: [String], lengthInMinutes: Int, transcript: String? = nil) {
+        self.init()
         self.date = date
         for attendee in attendees {
-            self.attendees.append(attendee)
+            self.attendeeList.append(attendee)
         }
         self.lengthInMinutes = lengthInMinutes
         self.transcript = transcript
