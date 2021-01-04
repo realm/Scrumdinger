@@ -58,8 +58,10 @@ extension DailyScrum {
     
     func update(from data: Data) {
         title = data.title
-        for attendee in attendees {
-            self.attendeeList.append(attendee)
+        for attendee in data.attendees {
+            if !attendees.contains(attendee) {
+                self.attendeeList.append(attendee)
+            }
         }
         lengthInMinutes = Int(data.lengthInMinutes)
         colorComponents = data.color.components

@@ -6,21 +6,20 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct DetailView: View {
-    @Binding var scrum: DailyScrum
+    @ObservedObject var scrum: DailyScrum
     
-    @EnvironmentObject var state: AppState
     @State private var data = DailyScrum.Data()
     @State private var isPresented = false
     
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
-                // TODO: Why do I need to pass in the state?
                 NavigationLink(
-                    destination: MeetingView(scrum: $scrum)
-                        .environmentObject(state)) {
+                    destination: MeetingView(scrum: scrum)
+                ) {
                     Label("Start Meeting", systemImage: "timer")
                         .font(.headline)
                         .foregroundColor(.accentColor)
@@ -75,7 +74,7 @@ struct DetailView: View {
                     }, trailing: Button("Done") {
                         isPresented = false
                         do {
-                            try state.realm.write {
+                            try Realm().write {
                                 scrum.update(from: data)
                             }
                         } catch {
@@ -88,12 +87,9 @@ struct DetailView: View {
 }
 
 struct DetailView_Previews: PreviewProvider {
-    static var state = AppState()
-
     static var previews: some View {
         NavigationView {
-            DetailView(scrum: .constant(DailyScrum.data[0]))
-                .environmentObject(state)
+            DetailView(scrum: DailyScrum.data[0])
         }
     }
 }

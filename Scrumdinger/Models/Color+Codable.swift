@@ -48,28 +48,10 @@ extension Color {
                           blue: Double(blue),
                           alpha: Double(alpha))
     }
-
-//    public init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        let red = try container.decode(Double.self, forKey: .red)
-//        let green = try container.decode(Double.self, forKey: .green)
-//        let blue = try container.decode(Double.self, forKey: .blue)
-//        let alpha = try container.decode(Double.self, forKey: .alpha)
-//        self.init(Components(red: red, green: green, blue: blue, alpha: alpha))
-//    }
     
     init(_ components: Components) {
         self.init(.sRGB, red: components.red, green: components.green, blue: components.blue, opacity: components.alpha)
     }
-
-//    public func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        let components = self.components
-//        try container.encode(components.red, forKey: .red)
-//        try container.encode(components.green, forKey: .green)
-//        try container.encode(components.blue, forKey: .blue)
-//        try container.encode(components.alpha, forKey: .alpha)
-//    }
 
     // MARK: - font colors
     /// This color is either black or white, whichever is more accessible when viewed against the scrum color.

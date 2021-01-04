@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
+import RealmSwift
 import AVFoundation
 
 struct MeetingView: View {
-    @Binding var scrum: DailyScrum
-    
-    @EnvironmentObject var state: AppState
+    @ObservedObject var scrum: DailyScrum
     
     @StateObject var scrumTimer = ScrumTimer()
     @State private var transcript = ""
@@ -51,7 +50,7 @@ struct MeetingView: View {
                                          lengthInMinutes: scrumTimer.secondsElapsed / 60,
                                          transcript: transcript)
                 do {
-                    try state.realm.write {
+                    try Realm().write {
                         scrum.historyList.insert(newHistory, at: 0)
                     }
                 } catch {
@@ -64,7 +63,6 @@ struct MeetingView: View {
 
 struct MeetingView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingView(scrum: .constant(DailyScrum.data[0]))
-            .environmentObject(AppState.sample)
+        MeetingView(scrum: DailyScrum.data[0])
     }
 }
