@@ -25,7 +25,7 @@ struct HistoryView: View {
                 }
             }
         }
-        .navigationTitle(Text(history.date, style: .date))
+        .navigationTitle(Text(history.date ?? Date(), style: .date))
         .padding()
     }
 }

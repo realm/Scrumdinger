@@ -3,18 +3,19 @@ See LICENSE folder for this sample’s licensing information.
 */
 
 import Foundation
+import RealmSwift
 
-struct History: Identifiable, Codable {
-    let id: UUID
-    let date: Date
-    var attendees: [String]
-    var lengthInMinutes: Int
-    var transcript: String?
+@objcMembers class History: EmbeddedObject, ObjectKeyIdentifiable {
+    dynamic var date: Date?
+    var attendeeList = List<String>()
+    dynamic var lengthInMinutes: Int = 0
+    dynamic var transcript: String?
+    var attendees: [String] { Array(attendeeList) }
 
-    init(id: UUID = UUID(), date: Date = Date(), attendees: [String], lengthInMinutes: Int, transcript: String? = nil) {
-        self.id = id
+    convenience init(date: Date = Date(), attendees: [String], lengthInMinutes: Int, transcript: String? = nil) {
+        self.init()
         self.date = date
-        self.attendees = attendees
+        attendeeList.append(objectsIn: attendees)
         self.lengthInMinutes = lengthInMinutes
         self.transcript = transcript
     }

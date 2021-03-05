@@ -5,24 +5,30 @@
 //  Created by Andrew Morgan on 22/12/2020.
 //
 
+import RealmSwift
 import SwiftUI
 
-struct DailyScrum: Identifiable, Codable {
-    let id: UUID
-    var title: String
-    var attendees: [String]
-    var lengthInMinutes: Int
-    var color: Color
-    var history: [History]
+@objcMembers class DailyScrum: Object, ObjectKeyIdentifiable {
+    dynamic var title = ""
+    var attendeeList = RealmSwift.List<String>()
+    dynamic var lengthInMinutes = 0
+    dynamic var colorComponents: Components?
+    var historyList = RealmSwift.List<History>()
     
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
-        self.id = id
+    var color: Color { Color(colorComponents ?? Components()) }
+    var attendees: [String] { Array(attendeeList) }
+    var history: [History] { Array(historyList) }
+    
+    convenience init(title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
+        self.init()
         self.title = title
-        self.attendees = attendees
+        attendeeList.append(objectsIn: attendees)
         self.lengthInMinutes = lengthInMinutes
-        self.color = color
-        self.history = history
+        self.colorComponents = color.components
+        for entry in history {
+            self.historyList.insert(entry, at: 0)
         }
+    }
 }
 
 extension DailyScrum {
@@ -47,11 +53,15 @@ extension DailyScrum {
         return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color)
     }
     
-    mutating func update(from data: Data) {
+    func update(from data: Data) {
         title = data.title
-        attendees = data.attendees
+        for attendee in data.attendees {
+            if !attendees.contains(attendee) {
+                self.attendeeList.append(attendee)
+            }
+        }
         lengthInMinutes = Int(data.lengthInMinutes)
-        color = data.color
+        colorComponents = data.color.components
     }
 }
 

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EditView: View {
     @Binding var scrumData: DailyScrum.Data
+    
     @State private var newAttendee = ""
     var body: some View {
         List {

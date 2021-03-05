@@ -1,15 +1,16 @@
 //
-//  ContentView.swift
+//  MeetingView.swift
 //  Scrumdinger
 //
 //  Created by Andrew Morgan on 22/12/2020.
 //
 
 import SwiftUI
+import RealmSwift
 import AVFoundation
 
 struct MeetingView: View {
-    @Binding var scrum: DailyScrum
+    @ObservedRealmObject var scrum: DailyScrum
     
     @StateObject var scrumTimer = ScrumTimer()
     @State private var transcript = ""
@@ -48,7 +49,7 @@ struct MeetingView: View {
                 let newHistory = History(attendees: scrum.attendees,
                                          lengthInMinutes: scrumTimer.secondsElapsed / 60,
                                          transcript: transcript)
-                scrum.history.insert(newHistory, at: 0)
+                $scrum.wrappedValue.historyList.insert(newHistory, at: 0)
             }
         }
     }
@@ -56,6 +57,6 @@ struct MeetingView: View {
 
 struct MeetingView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingView(scrum: .constant(DailyScrum.data[0]))
+        MeetingView(scrum: DailyScrum.data[0])
     }
 }

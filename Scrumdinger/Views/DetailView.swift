@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct DetailView: View {
-    @Binding var scrum: DailyScrum
+    @ObservedRealmObject var scrum: DailyScrum
+    
     @State private var data = DailyScrum.Data()
     @State private var isPresented = false
     
@@ -16,7 +18,8 @@ struct DetailView: View {
         List {
             Section(header: Text("Meeting Info")) {
                 NavigationLink(
-                    destination: MeetingView(scrum: $scrum)) {
+                    destination: MeetingView(scrum: scrum)
+                ) {
                     Label("Start Meeting", systemImage: "timer")
                         .font(.headline)
                         .foregroundColor(.accentColor)
@@ -47,10 +50,14 @@ struct DetailView: View {
                     Label("No meetings yet", systemImage: "calendar.badge.exclamationmark")
                 }
                 ForEach(scrum.history) { history in
-                    NavigationLink(destination: HistoryView(history: history                                                                                                                                                                                                                                            )) {
+                    NavigationLink(destination: HistoryView(history: history)) {
                         HStack {
                             Image(systemName: "calendar")
-                            Text(history.date, style: .date)
+                            if let date = history.date {
+                                Text(date, style: .date)
+                            } else {
+                                Text("Date is missing")
+                            }
                         }
                     }
                 }
@@ -66,12 +73,13 @@ struct DetailView: View {
             NavigationView {
                 EditView(scrumData: $data)
                     .navigationTitle(scrum.title)
-                    // TODO: Use this in my apps
                     .navigationBarItems(leading: Button("Cancel") {
                         isPresented = false
                     }, trailing: Button("Done") {
                         isPresented = false
-                        scrum.update(from: data)
+                        try! Realm().write() {
+                            scrum.thaw()!.update(from: data)
+                        }
                 })
             }
         }
@@ -81,7 +89,7 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DetailView(scrum: .constant(DailyScrum.data[0]))
+            DetailView(scrum: DailyScrum.data[0])
         }
     }
 }
