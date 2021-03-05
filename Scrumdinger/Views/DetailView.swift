@@ -53,7 +53,11 @@ struct DetailView: View {
                     NavigationLink(destination: HistoryView(history: history)) {
                         HStack {
                             Image(systemName: "calendar")
-                            Text(history.date ?? Date(), style: .date)
+                            if let date = history.date {
+                                Text(date, style: .date)
+                            } else {
+                                Text("Date is missing")
+                            }
                         }
                     }
                 }

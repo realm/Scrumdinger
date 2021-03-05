@@ -8,13 +8,13 @@
 import RealmSwift
 import SwiftUI
 
-class DailyScrum: Object, Identifiable {
-    @objc dynamic var id = UUID().uuidString
-    @objc dynamic var title = ""
-    let attendeeList = RealmSwift.List<String>()
-    @objc dynamic var lengthInMinutes = 0
-    @objc dynamic var colorComponents: Components?
-    let historyList = RealmSwift.List<History>()
+@objcMembers class DailyScrum: Object, Identifiable {
+    dynamic var id = UUID().uuidString
+    dynamic var title = ""
+    var attendeeList = RealmSwift.List<String>()
+    dynamic var lengthInMinutes = 0
+    dynamic var colorComponents: Components?
+    var historyList = RealmSwift.List<History>()
     
     var color: Color { Color(colorComponents ?? Components()) }
     var attendees: [String] { Array(attendeeList) }
@@ -23,9 +23,7 @@ class DailyScrum: Object, Identifiable {
     convenience init(title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
         self.init()
         self.title = title
-        for attendee in attendees {
-            self.attendeeList.append(attendee)
-        }
+        attendeeList.append(objectsIn: attendees)
         self.lengthInMinutes = lengthInMinutes
         self.colorComponents = color.components
         for entry in history {
@@ -53,7 +51,7 @@ extension DailyScrum {
     }
 
     var data: Data {
-        return Data(title: title, attendees: Array(attendees), lengthInMinutes: Double(lengthInMinutes), color: color)
+        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color)
     }
     
     func update(from data: Data) {
