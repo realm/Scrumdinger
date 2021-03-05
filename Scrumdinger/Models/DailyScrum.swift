@@ -8,8 +8,7 @@
 import RealmSwift
 import SwiftUI
 
-@objcMembers class DailyScrum: Object, Identifiable {
-    dynamic var id = UUID().uuidString
+@objcMembers class DailyScrum: Object, ObjectKeyIdentifiable {
     dynamic var title = ""
     var attendeeList = RealmSwift.List<String>()
     dynamic var lengthInMinutes = 0

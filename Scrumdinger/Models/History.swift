@@ -5,8 +5,7 @@ See LICENSE folder for this sample’s licensing information.
 import Foundation
 import RealmSwift
 
-@objcMembers class History: EmbeddedObject, Identifiable {
-    dynamic var id = UUID().uuidString
+@objcMembers class History: EmbeddedObject, ObjectKeyIdentifiable {
     dynamic var date: Date?
     var attendeeList = List<String>()
     dynamic var lengthInMinutes: Int = 0

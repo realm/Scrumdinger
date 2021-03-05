@@ -9,9 +9,9 @@ import SwiftUI
 import RealmSwift
 
 struct ScrumsView: View {
+    @ObservedResults(DailyScrum.self) var scrums
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
-    @State private var scrums: Results<DailyScrum>?
     @State private var currentScrum = DailyScrum()
     
     var body: some View {
@@ -42,21 +42,10 @@ struct ScrumsView: View {
                             attendees: newScrumData.attendees,
                             lengthInMinutes: Int(newScrumData.lengthInMinutes),
                             color: newScrumData.color)
-                        do {
-                            let realm = try Realm()
-                            try realm.write {
-                                realm.add(newScrum)
-                            }
-                        } catch {
-                            print("Failed to write to realm")
-                        }
+                        $scrums.append(newScrum)
                         isPresented = false
                     })
             }
-        }
-        .onAppear {
-            let realm = try! Realm()
-            scrums = realm.objects(DailyScrum.self)
         }
     }
 }

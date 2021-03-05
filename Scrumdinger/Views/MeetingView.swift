@@ -10,7 +10,7 @@ import RealmSwift
 import AVFoundation
 
 struct MeetingView: View {
-    @ObservedObject var scrum: DailyScrum
+    @ObservedRealmObject var scrum: DailyScrum
     
     @StateObject var scrumTimer = ScrumTimer()
     @State private var transcript = ""
@@ -49,13 +49,7 @@ struct MeetingView: View {
                 let newHistory = History(attendees: scrum.attendees,
                                          lengthInMinutes: scrumTimer.secondsElapsed / 60,
                                          transcript: transcript)
-                do {
-                    try Realm().write {
-                        scrum.historyList.insert(newHistory, at: 0)
-                    }
-                } catch {
-                    print("Failed to add history element to Realm")
-                }
+                $scrum.wrappedValue.historyList.insert(newHistory, at: 0)
             }
         }
     }

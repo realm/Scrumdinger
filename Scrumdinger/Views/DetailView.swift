@@ -9,7 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct DetailView: View {
-    @ObservedObject var scrum: DailyScrum
+    @ObservedRealmObject var scrum: DailyScrum
     
     @State private var data = DailyScrum.Data()
     @State private var isPresented = false
@@ -77,12 +77,8 @@ struct DetailView: View {
                         isPresented = false
                     }, trailing: Button("Done") {
                         isPresented = false
-                        do {
-                            try Realm().write {
-                                scrum.update(from: data)
-                            }
-                        } catch {
-                            print("Unable to update data in Realm")
+                        try! Realm().write() {
+                            scrum.thaw()!.update(from: data)
                         }
                 })
             }
