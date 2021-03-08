@@ -77,8 +77,16 @@ struct DetailView: View {
                         isPresented = false
                     }, trailing: Button("Done") {
                         isPresented = false
-                        try! Realm().write() {
-                            scrum.thaw()!.update(from: data)
+                        do {
+                            try Realm().write() {
+                                guard let thawedScrum = scrum.thaw() else {
+                                    print("Unable to thaw scrum")
+                                    return
+                                }
+                                thawedScrum.update(from: data)
+                            }
+                        } catch {
+                            print("Failed to save scrum: \(error.localizedDescription)")
                         }
                 })
             }
