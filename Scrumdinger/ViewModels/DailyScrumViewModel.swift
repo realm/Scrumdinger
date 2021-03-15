@@ -36,11 +36,6 @@ class DailyScrumViewModel: ObservableObject, Identifiable {
         "\(scrum.lengthInMinutes) minutes"
     }
 
-    /// A new `ScrumTimer` using the meeting length and attendees in the `DailyScrum`.
-    var timer: ScrumTimer {
-        ScrumTimer(lengthInMinutes: scrum.lengthInMinutes, attendees: attendees)
-    }
-
     var isPresented = false {
         didSet {
             objectWillChange.send()

@@ -1,4 +1,4 @@
-import Foundation
+import Combine
 import RealmSwift
 import SwiftUI
 
@@ -18,10 +18,34 @@ class MeetingViewModel: ObservableObject {
     var history: [History] {
         scrum.history.map { $0 }
     }
-    private(set) var scrum: DailyScrum
+
+    var isRecording = false {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+
+    var transcript = "" {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+
+    var timer: ScrumTimer = ScrumTimer()
+
+    private var scrum: DailyScrum
+    private var token: AnyCancellable?
 
     init (scrum: DailyScrum) {
         self.scrum = scrum
+
+        token = timer.objectWillChange.sink { _ in
+            self.objectWillChange.send()
+        }
+    }
+
+    deinit {
+        token = nil
     }
 
     func insertHistory(elaspsedTime: Int, transcript: String) {

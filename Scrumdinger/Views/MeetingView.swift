@@ -12,42 +12,39 @@ import AVFoundation
 struct MeetingView: View {
     @ObservedObject var viewModel: MeetingViewModel
 
-    @StateObject var scrumTimer = ScrumTimer()
-    @State private var transcript = ""
-    @State private var isRecording = false
     private let speechRecognizer = SpeechRecognizer()
     var player: AVPlayer { AVPlayer.sharedDingPlayer }
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16.0)
-                .fill(viewModel.scrum.color)
+                .fill(viewModel.color)
             VStack {
                 MeetingHeaderView(
-                    secondsElapsed: $scrumTimer.secondsElapsed,
-                    secondsRemaining: $scrumTimer.secondsRemaining,
-                    scrumColor: viewModel.scrum.color)
-                MeetingTimerView(speakers: $scrumTimer.speakers, isRecording: $isRecording, scrumColor: viewModel.scrum.color)
-                MeetingFooterView(speakers: $scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
+                    secondsElapsed: $viewModel.timer.secondsElapsed,
+                    secondsRemaining: $viewModel.timer.secondsRemaining,
+                    scrumColor: viewModel.color)
+                MeetingTimerView(speakers: $viewModel.timer.speakers, isRecording: $viewModel.isRecording, scrumColor: viewModel.color)
+                MeetingFooterView(speakers: $viewModel.timer.speakers, skipAction: viewModel.timer.skipSpeaker)
             }
             .padding()
-            .foregroundColor(viewModel.scrum.color.accessibleFontColor)
+            .foregroundColor(viewModel.color.accessibleFontColor)
             .onAppear {
-                scrumTimer.reset(lengthInMinutes: viewModel.lengthInMinutes, attendees: viewModel.attendees)
-                scrumTimer.speakerChangedAction = {
+                viewModel.timer.reset(lengthInMinutes: viewModel.lengthInMinutes, attendees: viewModel.attendees)
+                viewModel.timer.speakerChangedAction = {
                     player.seek(to: .zero)
                     player.play()
                 }
-                speechRecognizer.record(to: $transcript)
-                isRecording = true
-                scrumTimer.startScrum()
+                speechRecognizer.record(to: $viewModel.transcript)
+                viewModel.isRecording = true
+                viewModel.timer.startScrum()
             }
             .onDisappear {
-                scrumTimer.stopScrum()
+                viewModel.timer.stopScrum()
                 speechRecognizer.stopRecording()
-                isRecording = false
-                viewModel.insertHistory(elaspsedTime: scrumTimer.secondsElapsed / 60,
-                                        transcript: transcript)
+                viewModel.isRecording = false
+                viewModel.insertHistory(elaspsedTime: viewModel.timer.secondsElapsed / 60,
+                                        transcript: viewModel.transcript)
             }
         }
     }

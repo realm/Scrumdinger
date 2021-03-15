@@ -71,6 +71,11 @@ class EditViewModel: ObservableObject {
         do {
             let r = try Realm()
             try r.write {
+                scrum.title = title
+                scrum.lengthInMinutes = Int(lengthInMinutes)
+                scrum.colorComponents = color.components
+                scrum.attendees.removeAll()
+                scrum.attendees.append(objectsIn: attendees)
                 r.add(scrum)
             }
         } catch(let e) {

@@ -30,7 +30,6 @@ struct ScrumsView: View {
                 EditView(viewModel: EditViewModel(),
                          isPresented: $viewModel.isPresented,
                          context: .scrumsView)
-
             }
         }
     }
