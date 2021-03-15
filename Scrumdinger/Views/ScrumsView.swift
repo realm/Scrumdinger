@@ -9,14 +9,11 @@ import SwiftUI
 import RealmSwift
 
 struct ScrumsView: View {
-    @ObservedResults(DailyScrum.self) var scrums
-    @State private var isPresented = false
-    @State private var newScrumData = DailyScrum.Data()
-    @State private var currentScrum = DailyScrum()
+    @StateObject private var viewModel = ScrumsViewModel()
     
     var body: some View {
         List {
-            if let scrums = scrums {
+            if let scrums = viewModel.scrums {
                 ForEach(scrums) { scrum in
                     NavigationLink(destination: DetailView(scrum: scrum)) {
                         CardView(scrum: scrum)
@@ -27,23 +24,18 @@ struct ScrumsView: View {
         }
         .navigationTitle("Daily Scrums")
         .navigationBarItems(trailing: Button(action: {
-            isPresented = true
+            viewModel.isPresented = true
         }) {
             Image(systemName: "plus")
         })
-        .sheet(isPresented: $isPresented) {
+        .sheet(isPresented: $viewModel.isPresented) {
             NavigationView {
-                EditView(scrumData: $newScrumData)
+                EditView(scrumData: $viewModel.newScrumData)
                     .navigationBarItems(leading: Button("Dismiss") {
-                        isPresented = false
+                        viewModel.isPresented = false
                     }, trailing: Button("Add") {
-                        let newScrum = DailyScrum(
-                            title: newScrumData.title,
-                            attendees: newScrumData.attendees,
-                            lengthInMinutes: Int(newScrumData.lengthInMinutes),
-                            color: newScrumData.color)
-                        $scrums.append(newScrum)
-                        isPresented = false
+                        viewModel.addScrum(from: viewModel.newScrumData)
+                        viewModel.isPresented = false
                     })
             }
         }
