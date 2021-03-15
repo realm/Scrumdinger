@@ -32,6 +32,7 @@ class MeetingViewModel: ObservableObject {
     }
 
     var timer: ScrumTimer = ScrumTimer()
+    let speechRecognizer = SpeechRecognizer()
 
     private var scrum: DailyScrum
     private var token: AnyCancellable?

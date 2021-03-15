@@ -1,10 +1,3 @@
-//
-//  HistoryView.swift
-//  Scrumdinger
-//
-//  Created by Andrew Morgan on 23/12/2020.
-//
-
 import SwiftUI
 
 struct HistoryView: View {

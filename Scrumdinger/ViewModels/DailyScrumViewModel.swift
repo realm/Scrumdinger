@@ -1,3 +1,4 @@
+import RealmSwift
 import SwiftUI
 
 class DailyScrumViewModel: ObservableObject, Identifiable {
@@ -24,9 +25,6 @@ class DailyScrumViewModel: ObservableObject, Identifiable {
         get {
             scrum.color
         }
-        set {
-            // FIXME
-        }
     }
     var history: [History] {
         scrum.history.map { $0 }
@@ -43,8 +41,16 @@ class DailyScrumViewModel: ObservableObject, Identifiable {
     }
 
     private(set) var scrum: DailyScrum
+    private var notificationToken: NotificationToken?
 
     init (scrum: DailyScrum) {
         self.scrum = scrum
+        notificationToken = scrum.observe { changes in
+            self.objectWillChange.send()
+        }
+    }
+
+    deinit {
+        notificationToken = nil
     }
 }

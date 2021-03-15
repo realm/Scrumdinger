@@ -1,10 +1,3 @@
-//
-//  DetailView.swift
-//  Scrumdinger
-//
-//  Created by Andrew Morgan on 22/12/2020.
-//
-
 import SwiftUI
 import RealmSwift
 

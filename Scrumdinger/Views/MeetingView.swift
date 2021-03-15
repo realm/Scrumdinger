@@ -1,10 +1,3 @@
-//
-//  MeetingView.swift
-//  Scrumdinger
-//
-//  Created by Andrew Morgan on 22/12/2020.
-//
-
 import SwiftUI
 import RealmSwift
 import AVFoundation
@@ -12,7 +5,6 @@ import AVFoundation
 struct MeetingView: View {
     @ObservedObject var viewModel: MeetingViewModel
 
-    private let speechRecognizer = SpeechRecognizer()
     var player: AVPlayer { AVPlayer.sharedDingPlayer }
     
     var body: some View {
@@ -35,13 +27,13 @@ struct MeetingView: View {
                     player.seek(to: .zero)
                     player.play()
                 }
-                speechRecognizer.record(to: $viewModel.transcript)
+                viewModel.speechRecognizer.record(to: $viewModel.transcript)
                 viewModel.isRecording = true
                 viewModel.timer.startScrum()
             }
             .onDisappear {
                 viewModel.timer.stopScrum()
-                speechRecognizer.stopRecording()
+                viewModel.speechRecognizer.stopRecording()
                 viewModel.isRecording = false
                 viewModel.insertHistory(elaspsedTime: viewModel.timer.secondsElapsed / 60,
                                         transcript: viewModel.transcript)
