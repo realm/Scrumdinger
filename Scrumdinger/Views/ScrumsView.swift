@@ -1,24 +1,21 @@
-//
-//  ScrumsView.swift
-//  Scrumdinger
-//
-//  Created by Andrew Morgan on 22/12/2020.
-//
-
 import SwiftUI
 import RealmSwift
 
 struct ScrumsView: View {
-    @StateObject private var viewModel = ScrumsViewModel()
-    
+    @ObservedObject private var viewModel: ScrumsViewModel
+
+    init(viewModel: ScrumsViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         List {
-            if let scrums = viewModel.scrums {
-                ForEach(scrums) { scrum in
-                    NavigationLink(destination: DetailView(scrum: scrum)) {
-                        CardView(scrum: scrum)
+            if let viewModels = viewModel.scrumViewModels {
+                ForEach(viewModels) { detailViewModel in
+                    NavigationLink(destination: DetailView(viewModel: detailViewModel)) {
+                        CardView(viewModel: detailViewModel)
                     }
-                    .listRowBackground(scrum.color)
+                    .listRowBackground(detailViewModel.color)
                 }
             }
         }
@@ -30,13 +27,10 @@ struct ScrumsView: View {
         })
         .sheet(isPresented: $viewModel.isPresented) {
             NavigationView {
-                EditView(scrumData: $viewModel.newScrumData)
-                    .navigationBarItems(leading: Button("Dismiss") {
-                        viewModel.isPresented = false
-                    }, trailing: Button("Add") {
-                        viewModel.addScrum(from: viewModel.newScrumData)
-                        viewModel.isPresented = false
-                    })
+                EditView(viewModel: EditViewModel(),
+                         isPresented: $viewModel.isPresented,
+                         context: .scrumsView)
+
             }
         }
     }
@@ -45,7 +39,7 @@ struct ScrumsView: View {
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView()
+            ScrumsView(viewModel: ScrumsViewModel())
         }
     }
 }

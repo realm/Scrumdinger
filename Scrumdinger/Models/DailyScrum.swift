@@ -10,24 +10,27 @@ import SwiftUI
 
 @objcMembers class DailyScrum: Object, ObjectKeyIdentifiable {
     dynamic var title = ""
-    var attendeeList = RealmSwift.List<String>()
+    var attendees = RealmSwift.List<String>()
     dynamic var lengthInMinutes = 0
     dynamic var colorComponents: Components?
-    var historyList = RealmSwift.List<History>()
+    var history = RealmSwift.List<History>()
     
     var color: Color { Color(colorComponents ?? Components()) }
-    var attendees: [String] { Array(attendeeList) }
-    var history: [History] { Array(historyList) }
-    
+
     convenience init(title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
         self.init()
         self.title = title
-        attendeeList.append(objectsIn: attendees)
+        self.attendees.append(objectsIn: attendees)
         self.lengthInMinutes = lengthInMinutes
         self.colorComponents = color.components
         for entry in history {
-            self.historyList.insert(entry, at: 0)
+            self.history.insert(entry, at: 0)
         }
+    }
+
+    convenience init(viewModel: DailyScrumViewModel) {
+        self.init()
+
     }
 }
 
@@ -42,26 +45,15 @@ extension DailyScrum {
 }
 
 extension DailyScrum {
-    struct Data {
-        var title: String = ""
-        var attendees: [String] = []
-        var lengthInMinutes: Double = 5.0
-        var color: Color = .random
-    }
-
-    var data: Data {
-        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color)
-    }
-    
-    func update(from data: Data) {
-        title = data.title
-        for attendee in data.attendees {
+    func update(from viewModel: DailyScrumViewModel) {
+        title = viewModel.title
+        for attendee in viewModel.attendees {
             if !attendees.contains(attendee) {
-                self.attendeeList.append(attendee)
+                self.attendees.append(attendee)
             }
         }
-        lengthInMinutes = Int(data.lengthInMinutes)
-        colorComponents = data.color.components
+        lengthInMinutes = Int(viewModel.lengthInMinutes)
+        colorComponents = viewModel.color.components
     }
 }
 

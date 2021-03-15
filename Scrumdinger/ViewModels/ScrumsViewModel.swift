@@ -1,13 +1,12 @@
 import Foundation
 import RealmSwift
+import SwiftUI
 
 class ScrumsViewModel: ObservableObject {
 
     // MARK: - Model
-    var scrums: Results<DailyScrum>?
-    var newScrumData = DailyScrum.Data()
-    var currentScrum = DailyScrum()
-    var notificationToken: NotificationToken?
+    private var scrums: Results<DailyScrum>
+    private var notificationToken: NotificationToken?
 
     // MARK: - Presentation
     var isPresented = false {
@@ -16,24 +15,19 @@ class ScrumsViewModel: ObservableObject {
         }
     }
 
+    var scrumViewModels: [DailyScrumViewModel] {
+        scrums.map { DailyScrumViewModel(scrum: $0) }
+    }
+
     init() {
         do {
             let realm = try Realm()
-            notificationToken = realm.objects(DailyScrum.self).observe { change in
-                switch change {
-                    case .initial(let initial):
-                        self.scrums = initial
-                        break
-                    case .update(let results, deletions: _, insertions: _, modifications: _):
-                        self.scrums = results
-                        break
-                    case .error(let e):
-                        print(e.localizedDescription)
-                }
+            scrums = realm.objects(DailyScrum.self)
+            notificationToken = realm.objects(DailyScrum.self).observe { changes in
                 self.objectWillChange.send()
             }
         } catch(let e) {
-            print(e)
+            fatalError(e.localizedDescription)
         }
     }
 
@@ -42,13 +36,15 @@ class ScrumsViewModel: ObservableObject {
     }
 
     /// Add a Daily Scrum event and persist to Realm.
-    /// - Parameter data: The Daily Scrum data
-    func addScrum(from data: DailyScrum.Data) {
+    func createScrum(title: String,
+                     attendees: [String],
+                     lengthInMinutes: Int,
+                     color: Color) {
         let newScrum = DailyScrum(
-            title: data.title,
-            attendees: data.attendees,
-            lengthInMinutes: Int(data.lengthInMinutes),
-            color: data.color)
+            title: title,
+            attendees: attendees,
+            lengthInMinutes: lengthInMinutes,
+            color: color)
         do {
             let realm = try Realm()
             try realm.write {

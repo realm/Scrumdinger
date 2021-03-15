@@ -13,7 +13,7 @@ struct ScrumdingerApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ScrumsView()
+                ScrumsView(viewModel: ScrumsViewModel())
             }
         }
     }

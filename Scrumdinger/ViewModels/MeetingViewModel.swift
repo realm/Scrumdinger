@@ -1,22 +1,31 @@
-//
-//  MeetingViewModel.swift
-//  Scrumdinger
-//
-//  Created by Lee Maguire on 15/03/2021.
-//
-
 import Foundation
 import RealmSwift
+import SwiftUI
 
 class MeetingViewModel: ObservableObject {
-    var scrum: DailyScrum
+    var title: String {
+        scrum.title
+    }
+    var attendees: [String] {
+        scrum.attendees.map { $0 }
+    }
+    var lengthInMinutes: Int {
+        scrum.lengthInMinutes
+    }
+    var color: Color {
+        scrum.color
+    }
+    var history: [History] {
+        scrum.history.map { $0 }
+    }
+    private(set) var scrum: DailyScrum
 
-    init(scrum: DailyScrum) {
+    init (scrum: DailyScrum) {
         self.scrum = scrum
     }
 
     func insertHistory(elaspsedTime: Int, transcript: String) {
-        let newHistory = History(attendees: scrum.attendees,
+        let newHistory = History(attendees: attendees,
                                  lengthInMinutes: elaspsedTime,
                                  transcript: transcript)
         do {
@@ -25,7 +34,7 @@ class MeetingViewModel: ObservableObject {
                     print("Unable to thaw scrum")
                     return
                 }
-                thawedScrum.historyList.insert(newHistory, at: 0)
+                thawedScrum.history.insert(newHistory, at: 0)
             }
         } catch {
             print("Failed to add meeting to scrum: \(error.localizedDescription)")

@@ -9,16 +9,17 @@ import SwiftUI
 import RealmSwift
 
 struct DetailView: View {
-    @ObservedRealmObject var scrum: DailyScrum
-    
-    @State private var data = DailyScrum.Data()
-    @State private var isPresented = false
-    
+    @ObservedObject private var viewModel: DailyScrumViewModel
+
+    init(viewModel: DailyScrumViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
                 NavigationLink(
-                    destination: MeetingView(viewModel: MeetingViewModel(scrum: scrum))
+                    destination: MeetingView(viewModel: MeetingViewModel(scrum: viewModel.scrum))
                 ) {
                     Label("Start Meeting", systemImage: "timer")
                         .font(.headline)
@@ -28,28 +29,28 @@ struct DetailView: View {
                 HStack {
                     Label("Length", systemImage: "clock")
                     Spacer()
-                    Text("\(scrum.lengthInMinutes) minutes")
+                    Text(viewModel.lengthInMinutesText)
                 }
                 HStack {
                     Label("Color", systemImage: "paintpalette")
                     Spacer()
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(scrum.color)
+                        .foregroundColor(viewModel.color)
                 }
                 .accessibilityElement(children: .ignore)
             }
             Section(header: Text("Attendees")) {
-                ForEach(scrum.attendees, id: \.self) { attendee in
+                ForEach(viewModel.attendees, id: \.self) { attendee in
                     Label(attendee, systemImage: "person")
                         .accessibilityLabel(Text("Person"))
                         .accessibilityValue(Text(attendee))
                 }
             }
             Section(header: Text("History")) {
-                if scrum.history.isEmpty {
+                if viewModel.history.isEmpty {
                     Label("No meetings yet", systemImage: "calendar.badge.exclamationmark")
                 }
-                ForEach(scrum.history) { history in
+                ForEach(viewModel.history) { history in
                     NavigationLink(destination: HistoryView(history: history)) {
                         HStack {
                             Image(systemName: "calendar")
@@ -65,31 +66,15 @@ struct DetailView: View {
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarItems(trailing: Button("Edit") {
-            isPresented = true
-            data = scrum.data
+            viewModel.isPresented = true
         })
-        .navigationTitle(scrum.title)
-        .fullScreenCover(isPresented: $isPresented) {
+        .navigationTitle(viewModel.title)
+        .fullScreenCover(isPresented: $viewModel.isPresented) {
             NavigationView {
-                EditView(scrumData: $data)
-                    .navigationTitle(scrum.title)
-                    .navigationBarItems(leading: Button("Cancel") {
-                        isPresented = false
-                    }, trailing: Button("Done") {
-                        isPresented = false
-                        // TODO: Find a simpler way to do this...
-                        do {
-                            try Realm().write() {
-                                guard let thawedScrum = scrum.thaw() else {
-                                    print("Unable to thaw scrum")
-                                    return
-                                }
-                                thawedScrum.update(from: data)
-                            }
-                        } catch {
-                            print("Failed to save scrum: \(error.localizedDescription)")
-                        }
-                })
+                EditView(viewModel: EditViewModel(scrum: viewModel.scrum),
+                         isPresented: $viewModel.isPresented,
+                         context: .detailView)
+                    .navigationTitle(viewModel.title)
             }
         }
     }
@@ -98,7 +83,7 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DetailView(scrum: DailyScrum.data[0])
+            DetailView(viewModel: DailyScrumViewModel(scrum: DailyScrum.data.first!))
         }
     }
 }
