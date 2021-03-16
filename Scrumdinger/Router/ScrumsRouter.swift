@@ -13,6 +13,7 @@ class ScrumsRouter {
       DailyScrumInteractor(
         scrum: scrum,
         model: model)
+    )
     return DetailView(presenter: presenter)
   }
 }

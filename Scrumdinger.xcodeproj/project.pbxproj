@@ -29,6 +29,8 @@
 		0ACA08E52600CAC600E9C476 /* DailyScrumsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA08E42600CAC600E9C476 /* DailyScrumsInteractor.swift */; };
 		0ACA08E72600E6F000E9C476 /* ScrumsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA08E62600E6F000E9C476 /* ScrumsPresenter.swift */; };
 		0ACA08EA2601101F00E9C476 /* ScrumsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA08E92601101F00E9C476 /* ScrumsRouter.swift */; };
+		0ACA08EC2601130400E9C476 /* DailyScrumInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA08EB2601130400E9C476 /* DailyScrumInteractor.swift */; };
+		0ACA08EE2601146600E9C476 /* ScrumDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA08ED2601146600E9C476 /* ScrumDetailPresenter.swift */; };
 		0ADCF8E82593453D0079C0C9 /* MeetingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADCF8E72593453D0079C0C9 /* MeetingFooterView.swift */; };
 		0ADCF8EE25934C870079C0C9 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADCF8ED25934C870079C0C9 /* History.swift */; };
 		0ADCF8FA259356D60079C0C9 /* MeetingTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADCF8F9259356D60079C0C9 /* MeetingTimerView.swift */; };
@@ -81,6 +83,8 @@
 		0ACA08E42600CAC600E9C476 /* DailyScrumsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyScrumsInteractor.swift; sourceTree = "<group>"; };
 		0ACA08E62600E6F000E9C476 /* ScrumsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrumsPresenter.swift; sourceTree = "<group>"; };
 		0ACA08E92601101F00E9C476 /* ScrumsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrumsRouter.swift; sourceTree = "<group>"; };
+		0ACA08EB2601130400E9C476 /* DailyScrumInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyScrumInteractor.swift; sourceTree = "<group>"; };
+		0ACA08ED2601146600E9C476 /* ScrumDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrumDetailPresenter.swift; sourceTree = "<group>"; };
 		0ADCF8E72593453D0079C0C9 /* MeetingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingFooterView.swift; sourceTree = "<group>"; };
 		0ADCF8ED25934C870079C0C9 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		0ADCF8F9259356D60079C0C9 /* MeetingTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingTimerView.swift; sourceTree = "<group>"; };
@@ -220,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				0ACA08E62600E6F000E9C476 /* ScrumsPresenter.swift */,
+				0ACA08ED2601146600E9C476 /* ScrumDetailPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				0ACA08E42600CAC600E9C476 /* DailyScrumsInteractor.swift */,
+				0ACA08EB2601130400E9C476 /* DailyScrumInteractor.swift */,
 			);
 			path = Interactor;
 			sourceTree = "<group>";
@@ -379,6 +385,7 @@
 				0A28A2F3259250D300AFDE2D /* MeetingView.swift in Sources */,
 				0A28A33D25925F8200AFDE2D /* ScrumsView.swift in Sources */,
 				0ADCF8EE25934C870079C0C9 /* History.swift in Sources */,
+				0ACA08EE2601146600E9C476 /* ScrumDetailPresenter.swift in Sources */,
 				0ADCF90025935E570079C0C9 /* SpeechRecognizer.swift in Sources */,
 				0A28A34B2592706400AFDE2D /* EditView.swift in Sources */,
 				0A28A353259286F700AFDE2D /* MeetingHeaderView.swift in Sources */,
@@ -389,6 +396,7 @@
 				0A28A3232592572600AFDE2D /* DailyScrum.swift in Sources */,
 				0A28A346259268A300AFDE2D /* DetailView.swift in Sources */,
 				0A28A35E2592894000AFDE2D /* ScrumTimer.swift in Sources */,
+				0ACA08EC2601130400E9C476 /* DailyScrumInteractor.swift in Sources */,
 				0ACA08E52600CAC600E9C476 /* DailyScrumsInteractor.swift in Sources */,
 				0ACA08EA2601101F00E9C476 /* ScrumsRouter.swift in Sources */,
 				0A28A3632592894B00AFDE2D /* AVPlayer+Ding.swift in Sources */,

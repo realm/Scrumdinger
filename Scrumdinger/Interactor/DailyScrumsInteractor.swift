@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RealmSwift
+//import RealmSwift
 import SwiftUI
 
 class DailyScrumsInteractor {
