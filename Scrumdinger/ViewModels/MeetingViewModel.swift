@@ -36,10 +36,12 @@ class MeetingViewModel: ObservableObject {
 
     private var scrum: DailyScrum
     private var token: AnyCancellable?
+    private var realmConfiguration: Realm.Configuration
 
-    init (scrum: DailyScrum) {
+    init (scrum: DailyScrum,
+          realmConfiguration: Realm.Configuration = .defaultConfiguration) {
+        self.realmConfiguration = realmConfiguration
         self.scrum = scrum
-
         token = timer.objectWillChange.sink { _ in
             self.objectWillChange.send()
         }

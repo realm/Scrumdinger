@@ -44,6 +44,7 @@ class EditViewModel: ObservableObject {
     }
 
     private var scrum: DailyScrum
+    private var realmConfiguration: Realm.Configuration
 
     // MARK: - Add / Remove Attendee
 
@@ -69,7 +70,7 @@ class EditViewModel: ObservableObject {
             return
         }
         do {
-            let r = try Realm()
+            let r = try Realm(configuration: realmConfiguration)
             try r.write {
                 scrum.title = title
                 scrum.lengthInMinutes = Int(lengthInMinutes)
@@ -88,7 +89,7 @@ class EditViewModel: ObservableObject {
             return
         }
         do {
-            let r = try Realm()
+            let r = try Realm(configuration: realmConfiguration)
             try r.write {
                 scrum.title = title
                 scrum.lengthInMinutes = Int(lengthInMinutes)
@@ -112,7 +113,9 @@ class EditViewModel: ObservableObject {
 
     // MARK: - Initializers
 
-    init(scrum: DailyScrum?=nil) {
+    init(scrum: DailyScrum? = nil,
+         realmConfiguration: Realm.Configuration = .defaultConfiguration) {
+        self.realmConfiguration = realmConfiguration
         if let s = scrum {
             self.scrum = s
         } else {

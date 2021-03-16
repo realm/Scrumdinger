@@ -3,6 +3,8 @@ import SwiftUI
 
 class ScrumsViewModel: ObservableObject {
 
+    private var realmConfiguration: Realm.Configuration
+
     // MARK: - Model
     private var scrums: Results<DailyScrum>
     private var notificationToken: NotificationToken?
@@ -18,9 +20,10 @@ class ScrumsViewModel: ObservableObject {
         scrums.map { DailyScrumViewModel(scrum: $0) }
     }
 
-    init() {
+    init(realmConfiguration: Realm.Configuration = .defaultConfiguration) {
+        self.realmConfiguration = realmConfiguration
         do {
-            let realm = try Realm()
+            let realm = try Realm(configuration: realmConfiguration)
             scrums = realm.objects(DailyScrum.self)
             notificationToken = realm.objects(DailyScrum.self).observe { changes in
                 self.objectWillChange.send()
@@ -45,7 +48,7 @@ class ScrumsViewModel: ObservableObject {
             lengthInMinutes: lengthInMinutes,
             color: color)
         do {
-            let realm = try Realm()
+            let realm = try Realm(configuration: realmConfiguration)
             try realm.write {
                 realm.add(newScrum)
             }
