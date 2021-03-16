@@ -9,11 +9,11 @@ import RealmSwift
 import SwiftUI
 
 @objcMembers class DailyScrum: Object, ObjectKeyIdentifiable {
-    dynamic var title = ""
-    dynamic var lengthInMinutes = 0
-    private dynamic var colorComponents: Components?
-    private var attendeeList = RealmSwift.List<String>()
-    private var historyList = RealmSwift.List<History>()
+    @Published dynamic var title = ""
+    @Published dynamic var lengthInMinutes = 0
+    @Published dynamic var colorComponents: Components?
+    @Published var attendeeList = RealmSwift.List<String>()
+    @Published var historyList = RealmSwift.List<History>()
     
 //    var color: Color { Color(colorComponents ?? Components()) }
     var attendees: [String] {
