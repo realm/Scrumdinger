@@ -9,20 +9,19 @@ import SwiftUI
 import RealmSwift
 
 struct ScrumsView: View {
-    @ObservedResults(DailyScrum.self) var scrums
+    @ObservedObject var presenter: ScrumsPresenter
+//    @ObservedResults(DailyScrum.self) var scrums
     @State private var isPresented = false
-    @State private var newScrumData = DailyScrum.Data()
+//    @State private var newScrumData = DailyScrum.Data()
     @State private var currentScrum = DailyScrum()
     
     var body: some View {
         List {
-            if let scrums = scrums {
-                ForEach(scrums) { scrum in
-                    NavigationLink(destination: DetailView(scrum: scrum)) {
-                        CardView(scrum: scrum)
-                    }
-                    .listRowBackground(scrum.color)
+            ForEach (presenter.scrums) { scrum in
+                self.presenter.linkBuilder(for: scrum) {
+                    CardView(scrum: scrum)
                 }
+                .listRowBackground(scrum.color)
             }
         }
         .navigationTitle("Daily Scrums")
@@ -31,29 +30,31 @@ struct ScrumsView: View {
         }) {
             Image(systemName: "plus")
         })
-        .sheet(isPresented: $isPresented) {
-            NavigationView {
-                EditView(scrumData: $newScrumData)
-                    .navigationBarItems(leading: Button("Dismiss") {
-                        isPresented = false
-                    }, trailing: Button("Add") {
-                        let newScrum = DailyScrum(
-                            title: newScrumData.title,
-                            attendees: newScrumData.attendees,
-                            lengthInMinutes: Int(newScrumData.lengthInMinutes),
-                            color: newScrumData.color)
-                        $scrums.append(newScrum)
-                        isPresented = false
-                    })
-            }
-        }
+//        .sheet(isPresented: $isPresented) {
+//            NavigationView {
+//                EditView(scrumData: $newScrumData)
+//                    .navigationBarItems(leading: Button("Dismiss") {
+//                        isPresented = false
+//                    }, trailing: Button("Add") {
+//                        let newScrum = DailyScrum(
+//                            title: newScrumData.title,
+//                            attendees: newScrumData.attendees,
+//                            lengthInMinutes: Int(newScrumData.lengthInMinutes),
+//                            color: newScrumData.color)
+//                        $scrums.append(newScrum)
+//                        isPresented = false
+//                    })
+//            }
+//        }
     }
 }
 
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView()
+            let interactor = DailyScrumsInteractor(model: DataModel.sample)
+            let presenter = ScrumsPresenter(interactor: interactor)
+            ScrumsView(presenter: presenter)
         }
     }
 }

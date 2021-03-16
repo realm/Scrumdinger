@@ -10,10 +10,13 @@ import RealmSwift
 
 @main
 struct ScrumdingerApp: SwiftUI.App {
+//    let model = DataModel()
+    let model = DataModel.sample
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ScrumsView()
+                ScrumsView(presenter: ScrumsPresenter(interactor: DailyScrumsInteractor(model: model)))
             }
         }
     }
