@@ -58,7 +58,7 @@ class ScrumdingerTests: XCTestCase {
         XCTAssertEqual(viewModel.history[0].lengthInMinutes, 5)
     }
 
-    func testUpdateEditViewModel() {
+    func testUpdateFromEditViewModel() {
         let scrum = DailyScrum.data[0]
         try! realm.write {
             realm.add(scrum)
@@ -79,7 +79,7 @@ class ScrumdingerTests: XCTestCase {
                        ["Daisy", "Simon", "Jonathan", "Lee"])
     }
 
-    func testCreateEditViewModel() {
+    func testCreateFromEditViewModel() {
         let viewModel = EditViewModel(realmConfiguration: realm.configuration)
         XCTAssertEqual(viewModel.attendees, [])
         viewModel.removeAttendee(at: [0])
