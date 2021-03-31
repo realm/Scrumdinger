@@ -60,8 +60,6 @@ struct MeetingView: View {
                 } catch {
                     print("Failed to add meeting to scrum: \(error.localizedDescription)")
                 }
-                // TODO: Replace with something like this...
-//                $scrum.wrappedValue.historyList.insert(newHistory, at: 0)
             }
         }
     }

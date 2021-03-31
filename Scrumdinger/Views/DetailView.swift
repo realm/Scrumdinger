@@ -77,7 +77,6 @@ struct DetailView: View {
                         isPresented = false
                     }, trailing: Button("Done") {
                         isPresented = false
-                        // TODO: Find a simpler way to do this...
                         do {
                             try Realm().write() {
                                 guard let thawedScrum = scrum.thaw() else {
