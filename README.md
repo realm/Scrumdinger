@@ -2,7 +2,7 @@
 
 The purpose of this repo is to show how the Scrumdinger app fom [Apple's SwiftUI tutorial](https://developer.apple.com/tutorials/app-dev-training) can be extended to use Realm to store the application data.
 
-The [`main` branch](https://github.com/ClusterDB/Scrumdinger) is the app as it appears in tutorial.
+The [`main` branch](https://github.com/ClusterDB/Scrumdinger) is the app as it appears in Apple's tutorial.
 
 The [`realm` branch](https://github.com/ClusterDB/Scrumdinger/tree/realm) contains a modified version of the Scrumdinger app that persists the application data in Realm.
 
