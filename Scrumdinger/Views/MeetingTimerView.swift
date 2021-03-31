@@ -67,7 +67,6 @@ struct MeetingTimerView: View {
 }
 
 struct MeetingTimerView_Previews: PreviewProvider {
-    // TODO: Use of @State in previews
     @State static var speakers = [ScrumTimer.Speaker(
                                     name: "Kim",
                                     isCompleted: true),

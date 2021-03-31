@@ -66,7 +66,6 @@ struct DetailView: View {
             NavigationView {
                 EditView(scrumData: $data)
                     .navigationTitle(scrum.title)
-                    // TODO: Use this in my apps
                     .navigationBarItems(leading: Button("Cancel") {
                         isPresented = false
                     }, trailing: Button("Done") {

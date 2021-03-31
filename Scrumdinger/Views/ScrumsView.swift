@@ -32,7 +32,6 @@ struct ScrumsView: View {
         })
         .sheet(isPresented: $isPresented) {
             NavigationView {
-                // TODO: Interesting that the nav buttons are added here, rather than in EditView
                 EditView(scrumData: $newScrumData)
                     .navigationBarItems(leading: Button("Dismiss") {
                         isPresented = false
@@ -52,7 +51,6 @@ struct ScrumsView: View {
         }
     }
     
-    // TODO: See if this simplifies any of my apps
     private func binding(for scrum: DailyScrum) -> Binding<DailyScrum> {
         guard let scrumIndex = scrums.firstIndex(where: { $0.id == scrum.id }) else {
             fatalError("Can't find scrum in array")
