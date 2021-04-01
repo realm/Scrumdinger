@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import RealmSwift
 
 @main
-struct ScrumdingerApp: SwiftUI.App {
+struct ScrumdingerApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
