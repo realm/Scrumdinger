@@ -5,11 +5,11 @@ See LICENSE folder for this sample’s licensing information.
 import SwiftUI
 import RealmSwift
 
-@objcMembers class Components: EmbeddedObject {
-    dynamic var red: Double = 0
-    dynamic var green: Double = 0
-    dynamic var blue: Double = 0
-    dynamic var alpha: Double = 0
+class Components: EmbeddedObject {
+    @Persisted var red: Double = 0
+    @Persisted var green: Double = 0
+    @Persisted var blue: Double = 0
+    @Persisted var alpha: Double = 0
     
     convenience init(red: Double, green: Double, blue: Double, alpha: Double) {
         self.init()

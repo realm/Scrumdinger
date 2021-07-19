@@ -5,11 +5,11 @@ See LICENSE folder for this sample’s licensing information.
 import Foundation
 import RealmSwift
 
-@objcMembers class History: EmbeddedObject, ObjectKeyIdentifiable {
-    dynamic var date: Date?
-    var attendeeList = List<String>()
-    dynamic var lengthInMinutes: Int = 0
-    dynamic var transcript: String?
+class History: EmbeddedObject, ObjectKeyIdentifiable {
+    @Persisted var date: Date?
+    @Persisted var attendeeList = List<String>()
+    @Persisted var lengthInMinutes: Int = 0
+    @Persisted var transcript: String?
     var attendees: [String] { Array(attendeeList) }
 
     convenience init(date: Date = Date(), attendees: [String], lengthInMinutes: Int, transcript: String? = nil) {
