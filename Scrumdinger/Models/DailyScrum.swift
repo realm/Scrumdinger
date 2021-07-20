@@ -12,6 +12,7 @@ class DailyScrum: Object, ObjectKeyIdentifiable {
     @Persisted var title = ""
     @Persisted var attendeeList = RealmSwift.List<String>()
     @Persisted var lengthInMinutes = 0
+    @Persisted var extraSeconds = 5
     @Persisted var colorComponents: Components?
     @Persisted var historyList = RealmSwift.List<History>()
     
