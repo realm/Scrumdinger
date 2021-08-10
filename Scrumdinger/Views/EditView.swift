@@ -24,6 +24,7 @@ struct EditView: View {
                     Text("\(Int(scrumData.lengthInMinutes)) minutes")
                         .accessibilityHidden(true)
                 }
+                Toggle("Public", isOn: $scrumData.isPublic)
                 ColorPicker("Color", selection: $scrumData.color)
                     .accessibilityLabel(Text("Color picker"))
             }

@@ -10,6 +10,7 @@ import RealmSwift
 
 struct ScrumsView: View {
     @ObservedResults(DailyScrum.self) var scrums
+    
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
     @State private var currentScrum = DailyScrum()
@@ -41,6 +42,7 @@ struct ScrumsView: View {
                             title: newScrumData.title,
                             attendees: newScrumData.attendees,
                             lengthInMinutes: Int(newScrumData.lengthInMinutes),
+                            isPublic: newScrumData.isPublic,
                             color: newScrumData.color)
                         $scrums.append(newScrum)
                         isPresented = false

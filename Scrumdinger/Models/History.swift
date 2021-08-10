@@ -8,6 +8,7 @@ import RealmSwift
 class History: EmbeddedObject, ObjectKeyIdentifiable {
     @Persisted var date: Date?
     @Persisted var attendeeList = List<String>()
+    @Persisted var numberOfAttendees = 0
     @Persisted var lengthInMinutes: Int = 0
     @Persisted var transcript: String?
     var attendees: [String] { Array(attendeeList) }
@@ -18,5 +19,6 @@ class History: EmbeddedObject, ObjectKeyIdentifiable {
         attendeeList.append(objectsIn: attendees)
         self.lengthInMinutes = lengthInMinutes
         self.transcript = transcript
+        self.numberOfAttendees = attendees.count
     }
 }

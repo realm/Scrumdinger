@@ -14,19 +14,22 @@ struct ScrumdingerApp: SwiftUI.App {
         WindowGroup {
             NavigationView {
                 ScrumsView()
+//                    .environment(\.realmConfiguration, Realm.Configuration(schemaVersion: 1))
                     .environment(\.realmConfiguration, Realm.Configuration(
-                        schemaVersion: 2
-//                        migrationBlock: { migration, oldSchemaVersion in
-//                            if oldSchemaVersion < 2 {
-//                                // The enumerateObjects(ofType:_:) method iterates over
-//                                // every Person object stored in the Realm file
-//                                migration.enumerateObjects(ofType: DailyScrum.className()) { oldObject, newObject in
-//                                    // combine name fields into a single field
-//                                    newObject!["extraSeconds"] = 72
-//                                }
-//                            }
-//                    }
-                ))
+                        schemaVersion: 2,
+                        migrationBlock: { migration, oldSchemaVersion in
+                            if oldSchemaVersion < 1 {
+                                // Could init the `DailyScrum.isPublic` field here, but the default behavior of setting
+                                // it to `false` is what we want.
+                            }
+                            if oldSchemaVersion < 2 {
+                                migration.enumerateObjects(ofType: History.className()) { oldObject, newObject in
+                                    let attendees = oldObject!["attendeeList"] as? RealmSwift.List<DynamicObject>
+                                    newObject!["numberOfAttendees"] = attendees?.count ?? 0
+                                }
+                            }
+                        }
+                    ))
             }
         }
     }

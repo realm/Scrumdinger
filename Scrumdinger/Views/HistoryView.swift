@@ -14,7 +14,8 @@ struct HistoryView: View {
             VStack(alignment: .leading) {
                 Divider()
                     .padding(.bottom)
-                Text("Attendees")
+//                Text("Attendees")
+                Text("\(history.numberOfAttendees) Attendee\(history.numberOfAttendees > 1 ? "s" : "")")
                     .font(.headline)
                 Text(history.attendeeString)
                 if let transcript = history.transcript {

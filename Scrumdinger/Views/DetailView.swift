@@ -30,6 +30,11 @@ struct DetailView: View {
                     Spacer()
                     Text("\(scrum.lengthInMinutes) minutes")
                 }
+                if scrum.isPublic {
+                    Label("Open to the public", systemImage: "lock.open")
+                } else {
+                    Label("Private", systemImage: "lock")
+                }
                 HStack {
                     Label("Color", systemImage: "paintpalette")
                     Spacer()
